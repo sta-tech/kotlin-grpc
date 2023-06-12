@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "ru.statech";
+
+message FileMeta {
+  string name = 1;
+  string contentType = 2;
+}
+
+message FileContent {
+  bytes data = 1;
+}
+
+message FileUploadRequest {
+  oneof payload {
+    FileMeta meta = 1;
+    FileContent content = 2;
+  }
+}
+
+enum FileUploadStatus {
+  Success = 0;
+  Failed = 1;
+}
+
+message FileUploadResponse {
+  FileUploadStatus status = 1;
+}
+
+service FileService {
+  rpc upload(stream FileUploadRequest) returns(FileUploadResponse);
+}
